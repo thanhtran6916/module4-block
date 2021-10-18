@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/block/create">Create</a>
+<form>
+    <input type="text" name="q">
+    <button>Search</button>
+</form>
+<table>
+    <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Image</th>
+    </tr>
+    <tr th:each="block : ${blocks}">
+        <td th:text="${block.id}"></td>
+        <td th:text="${block.title}"></td>
+        <td th:text="${block.content}"></td>
+        <td>
+            <img width="50px" height="50px" th:src="'/img/' + ${block.image}" alt="">
+        </td>
+        <td><a th:href="@{block/edit/{id}(id=${block.id})}">Edit</a></td>
+        <td><a th:href="@{block/delete/{id}(id=${block.id})}">Delete</a></td>
+        <td><a th:href="@{block/info/{id}(id=${block.id})}">Info</a></td>
+    </tr>
+</table>
+</body>
+</html>
