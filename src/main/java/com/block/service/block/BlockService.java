@@ -1,11 +1,13 @@
 package com.block.service.block;
 
 import com.block.model.Block;
-import com.block.repository.block.IBlockRepository;
+import com.block.repository.IBlockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlockService implements IBlockService{
@@ -14,8 +16,8 @@ public class BlockService implements IBlockService{
     private IBlockRepository blockRepository;
 
     @Override
-    public List<Block> getAll() {
-        return blockRepository.getAll();
+    public Page<Block> getAll(Pageable pageable) {
+        return blockRepository.findAll(pageable);
     }
 
     @Override
@@ -25,11 +27,17 @@ public class BlockService implements IBlockService{
 
     @Override
     public void delete(Long id) {
-        blockRepository.delete(id);
+        blockRepository.deleteById(id);
     }
 
     @Override
-    public Block getById(Long id) {
-        return blockRepository.getById(id);
+    public Optional<Block> getById(Long id) {
+        return blockRepository.findById(id);
+    }
+
+    @Override
+    public Page<Block> findBlockByTitleContaining(String title, Pageable pageable) {
+        Page<Block> blocks = blockRepository.findBlockByTitleContaining(title, pageable);
+        return blocks;
     }
 }

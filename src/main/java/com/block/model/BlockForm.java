@@ -12,6 +12,8 @@ public class BlockForm {
 
     private MultipartFile image;
 
+    private Category category;
+
     public BlockForm() {
     }
 
@@ -45,5 +47,13 @@ public class BlockForm {
 
     public void setImage(MultipartFile image) {
         this.image = image;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

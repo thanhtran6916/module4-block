@@ -16,6 +16,7 @@
         <th>Title</th>
         <th>Content</th>
         <th>Image</th>
+        <th>Category</th>
     </tr>
     <tr th:each="block : ${blocks}">
         <td th:text="${block.id}"></td>
@@ -24,10 +25,18 @@
         <td>
             <img width="50px" height="50px" th:src="'/img/' + ${block.image}" alt="">
         </td>
+        <td th:text="${block.category?.name}"></td>
         <td><a th:href="@{block/edit/{id}(id=${block.id})}">Edit</a></td>
         <td><a th:href="@{block/delete/{id}(id=${block.id})}">Delete</a></td>
         <td><a th:href="@{block/info/{id}(id=${block.id})}">Info</a></td>
     </tr>
 </table>
+<div>
+    <a th:if="${blocks.hasPrevious()}" th:href="@{/block?page=__${blocks.number - 1}__}">Previous</a>
+    <a th:if="${blocks.number == 0}" disabled >Previous</a>
+    <span th:text="${blocks.number}"></span>/ <span th:text="${blocks.totalPages}"></span>
+    <a th:if="${blocks.hasNext()}" th:href="@{/block?page=__${blocks.number + 1}__}">Next</a>
+    <a th:if="${!blocks.hasNext()}" disabled>Next</a>
+</div>
 </body>
 </html>

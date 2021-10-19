@@ -2,9 +2,14 @@ package com.block.controller;
 
 import com.block.model.Block;
 import com.block.model.BlockForm;
+import com.block.model.Category;
 import com.block.service.block.IBlockService;
+import com.block.service.category.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
@@ -14,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/block")
@@ -22,12 +27,27 @@ public class BlockController {
     @Autowired
     private IBlockService blockService;
 
+    @Autowired
+    private ICategoryService categoryService;
+
+    @ModelAttribute(name = "categories")
+    public Page<Category> categories(Pageable pageable) {
+        return categoryService.getAll(pageable);
+    }
+
+
     @Value("${upload-file}")
     private String uploadFile;
 
     @GetMapping
-    public ModelAndView showAll() {
-        List<Block> blocks = blockService.getAll();
+    public ModelAndView showAll(@RequestParam("q") Optional<String> q, @PageableDefault(size = 3) Pageable pageable) {
+        Page<Block> blocks = null;
+        if (q.isPresent()) {
+            String title = q.get();
+            blocks = blockService.findBlockByTitleContaining(title, pageable);
+        } else {
+            blocks = blockService.getAll(pageable);
+        }
         ModelAndView modelAndView = new ModelAndView("/block/list");
         modelAndView.addObject("blocks", blocks);
         return modelAndView;
@@ -56,15 +76,21 @@ public class BlockController {
         block.setImage(fileName);
         block.setTitle(blockForm.getTitle());
         block.setContent(blockForm.getContent());
+        block.setCategory(blockForm.getCategory());
         blockService.save(block);
         return "redirect:/block";
     }
 
     @GetMapping("/edit/{id}")
     public String showEdit(@PathVariable("id") Long id, Model model) {
-        Block block = blockService.getById(id);
-        model.addAttribute("block", block);
-        return "/block/edit";
+        Block block = null;
+        Optional<Block> block1 = blockService.getById(id);
+        if (block1.isPresent()) {
+            block = block1.get();
+            model.addAttribute("block", block);
+            return "/block/edit";
+        }
+        return "404";
     }
 
     @PostMapping("/edit/{id}")
@@ -75,16 +101,26 @@ public class BlockController {
 
     @GetMapping("/info/{id}")
     public String showInfo(@PathVariable("id") Long id, Model model) {
-        Block block = blockService.getById(id);
-        model.addAttribute("block", block);
-        return "/block/info";
+        Block block = null;
+        Optional<Block> block1 = blockService.getById(id);
+        if (block1.isPresent()) {
+            block = block1.get();
+            model.addAttribute("block", block);
+            return "/block/info";
+        }
+        return "404";
     }
 
     @GetMapping("/delete/{id}")
     public String showDelete(@PathVariable("id") Long id, Model model) {
-        Block block = blockService.getById(id);
-        model.addAttribute("block", block);
-        return "/block/delete";
+        Block block = null;
+        Optional<Block> block1 = blockService.getById(id);
+        if (block1.isPresent()) {
+            block = block1.get();
+            model.addAttribute("block", block);
+            return "/block/delete";
+        }
+        return "404";
     }
 
     @PostMapping("/delete/{id}")

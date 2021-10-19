@@ -1,14 +1,17 @@
 package com.block.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
 
 public interface IGeneralService<T> {
-    List<T> getAll();
+    Page<T> getAll(Pageable pageable);
 
     void save(T t);
 
     void delete(Long id);
 
-    T getById(Long id);
+    Optional<T> getById(Long id);
 
 }

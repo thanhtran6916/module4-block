@@ -16,6 +16,9 @@ public class Block {
 
     private String image;
 
+    @ManyToOne
+    private Category category;
+
     public Block() {
     }
 
@@ -49,5 +52,13 @@ public class Block {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
