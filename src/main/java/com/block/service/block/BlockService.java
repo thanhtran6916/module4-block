@@ -1,6 +1,7 @@
 package com.block.service.block;
 
 import com.block.model.Block;
+import com.block.model.Category;
 import com.block.repository.IBlockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,8 +22,9 @@ public class BlockService implements IBlockService{
     }
 
     @Override
-    public void save(Block block) {
+    public Block save(Block block) {
         blockRepository.save(block);
+        return block;
     }
 
     @Override
@@ -39,5 +41,20 @@ public class BlockService implements IBlockService{
     public Page<Block> findBlockByTitleContaining(String title, Pageable pageable) {
         Page<Block> blocks = blockRepository.findBlockByTitleContaining(title, pageable);
         return blocks;
+    }
+
+    @Override
+    public Iterable<Block> findAll() {
+        return blockRepository.findAll();
+    }
+
+    @Override
+    public Iterable<Block> findBlockByCategory(Category category) {
+        return blockRepository.findBlockByCategory(category);
+    }
+
+    @Override
+    public Page<Block> findAll(Pageable pageable) {
+        return blockRepository.findAll(pageable);
     }
 }

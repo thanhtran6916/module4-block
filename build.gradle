@@ -29,6 +29,9 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.3.0.Final'
     implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
     implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.5.5'
+    //RestFul
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.3'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.12.3'
 }
 
 test {
